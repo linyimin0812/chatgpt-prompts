@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  在 ChatGPT 输入框中输入 "/" 时列出提示词
 // @require      https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
-// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.2/assets/prompt-en-US.js
+// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.3/assets/prompt-en-US.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js
 // @match        https://chat.openai.com/
 // @match        https://chat.openai.com/c/*
@@ -23,6 +23,7 @@
     // 等待元素加载完毕
     function waitForElementToLoad() {
         var textarea = document.getElementById("prompt-textarea");
+        
         if (textarea) {
             textarea.addEventListener("input", function(event) {
                 var value = event.target.value.trim();
@@ -91,8 +92,7 @@
             dropdown.options[i].selected = (i === currentOptionIndex);
         }
 
-        event.currentTarget.value = dropdown.options[currentOptionIndex].value;;
-
+        event.currentTarget.value = dropdown.options[currentOptionIndex].value;
     }
 
     function handleEnterKey(event) {
@@ -115,9 +115,10 @@
         dropdown.id = "prompt-dropdown";
         dropdown.classList.add("custom-dropdown");
 
-        dropdown.addEventListener("change", function(event) {
+        dropdown.addEventListener("input", function(event) {
             var selectedValue = event.target.value;
             textarea.value = selectedValue;
+            textarea.style.overflowY = 'auto';
             hideDropdown();
         });
 
