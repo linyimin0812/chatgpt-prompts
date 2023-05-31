@@ -4,11 +4,12 @@
 // @version      1.0
 // @description  在 ChatGPT 输入框中输入 "/" 时列出提示词
 // @require      https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
+// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.1/assets/prompt-en-US.js
+// @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js
 // @match        https://chat.openai.com/
 // @match        https://chat.openai.com/c/*
 // @match        https://chat.openai.com/?*
 // @grant        GM_addStyle
-// @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js
 // @resource css https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css
 // ==/UserScript==
 
@@ -120,15 +121,12 @@
             hideDropdown();
         });
 
-        var option1 = document.createElement("option");
-        option1.label="选项1";
-        option1.value="Hello World1"
-        dropdown.add(option1);
-
-        var option2 = document.createElement("option");
-        option2.label="选项2";
-        option2.value="Hello World2"
-        dropdown.add(option2);
+        for (const prompt of CHAT_GPT_PROMPTS) {
+            const option = document.createElement("option");
+            option.label = prompt.label;
+            option.value = prompt.value;
+            dropdown.add(option);
+        }
 
         dropdown.size = dropdown.options.length;
 
