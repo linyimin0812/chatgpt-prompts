@@ -4,7 +4,7 @@
 // @version      1.0
 // @description  在 ChatGPT 输入框中输入 "/" 时列出提示词
 // @require      https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
-// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.1/assets/prompt-en-US.js
+// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.2/assets/prompt-en-US.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js
 // @match        https://chat.openai.com/
 // @match        https://chat.openai.com/c/*
