@@ -1,190 +1,189 @@
 // ==UserScript==
-// @name         ChatGPT 提示词
-// @namespace    your-namespace
-// @version      1.0
-// @description  在 ChatGPT 输入框中输入 "/" 时列出提示词
-// @require      https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
-// @require      https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.3/assets/prompt-en-US.js
-// @require      https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/js/select2.min.js
-// @match        https://chat.openai.com/
-// @match        https://chat.openai.com/c/*
-// @match        https://chat.openai.com/?*
-// @grant        GM_addStyle
-// @resource css https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.8/css/select2.min.css
+// @name                chatgpt-prompts
+// @namespace           https://github.com/linyimin0812/chatgpt-prompts
+// @supportURL          https://github.com/linyimin0812/chatgpt-prompts
+// @updateURL           https://github.com/linyimin0812/chatgpt-prompts/blob/main/chatgpt-prompt.user.js
+// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.4/chatgpt-prompt.user.js
+// @version             1.0
+// @author              linyimin
+// @description:zh-CN   在 ChatGPT 输入框中输入 '/' 时列出提示词
+// @require             https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
+// @require             https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js
+// @resource css        https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.dark.min.css
+// @match               https://chat.openai.com/*
+// @grant               GM_addStyle
+// @grant               GM_getResourceText
 // ==/UserScript==
 
 (function() {
 
+    // TODO: 1. 切换chat时失效
+    // TODO: 2. generate an icon
+    // TODO: 3. prompts
+    // TODO: 4. usage
+    // TODO: 5. mode
+
     'use strict';
 
-    var dropdownVisible = false;
-    var currentOptionIndex = 0;
+    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.4/assets'
 
-    // 等待元素加载完毕
-    function waitForElementToLoad() {
-        var textarea = document.getElementById("prompt-textarea");
-        
-        if (textarea) {
-            textarea.addEventListener("input", function(event) {
-                var value = event.target.value.trim();
-                if (value === "/") {
-                    if (!dropdownVisible) {
-                        showDropdown(textarea);
-                        dropdownVisible = true;
-                    }
-                } else {
-                    if (dropdownVisible) {
-                        hideDropdown();
-                        dropdownVisible = false;
-                    }
-                }
-            });
+    var language = navigator.language;
+    const defaultLanguage = 'en-US';
 
-            textarea.addEventListener("keydown", function(event) {
-                if (dropdownVisible) {
-                    handleDropdownNavigation(event);
-                }
-            });
-
-        } else {
-            setTimeout(waitForElementToLoad, 500); // 等待0.5秒后再次尝试
+    fetch(`${cdnUrl}/prompt-${language}.js`).then(response => {
+        if (!response.ok) {
+            if (language !== defaultLanguage) {
+                alert(`Use the default language: ${defaultLanguage} for the prompts of language: ${language} is exist.`);
+            } else {
+                alert(`prompts is not exist, plase check if the cdn: ${cdnUrl} is available.`)
+            }
         }
-    }
-
-    waitForElementToLoad();
-
-    function handleDropdownNavigation(event) {
-        console.log(event.key)
-        if (event.key === "ArrowDown") {
-            event.preventDefault();
-            highlightNextOption(event);
-        } else if (event.key === "ArrowUp") {
-            event.preventDefault();
-            highlightPreviousOption(event);
-        } else if (event.key === "Enter") {
-            handleEnterKey(event);
-        }
-    }
-
-    function highlightNextOption() {
-        var dropdown = document.getElementById("prompt-dropdown");
-        var optionsCount = dropdown.options.length;
-
-        if (currentOptionIndex < optionsCount - 1) {
-            currentOptionIndex++;
-        }
-
-        updateHighlightedOption(event);
-    }
-
-    function highlightPreviousOption(event) {
-        if (currentOptionIndex > 0) {
-            currentOptionIndex--;
-        }
-
-        updateHighlightedOption(event);
-    }
-
-    function updateHighlightedOption(event) {
-        var dropdown = document.getElementById("prompt-dropdown");
-
-        for (var i = 0; i < dropdown.options.length; i++) {
-            dropdown.options[i].selected = (i === currentOptionIndex);
-        }
-
-        event.currentTarget.value = dropdown.options[currentOptionIndex].value;
-    }
-
-    function handleEnterKey(event) {
-        event.preventDefault();
-        if (currentOptionIndex !== -1) {
-            var dropdown = document.getElementById("prompt-dropdown");
-            var selectedValue = dropdown.options[currentOptionIndex].value;
-            event.currentTarget.value = selectedValue;
-            hideDropdown();
-        }
-    }
-
-
-    function showDropdown(textarea) {
-        var dropdownContainer = document.createElement("div");
-        dropdownContainer.id = "prompt-dropdown-container";
-        dropdownContainer.classList.add("custom-dropdown-container");
-
-        var dropdown = document.createElement("select");
-        dropdown.id = "prompt-dropdown";
-        dropdown.classList.add("custom-dropdown");
-
-        dropdown.addEventListener("input", function(event) {
-            var selectedValue = event.target.value;
-            textarea.value = selectedValue;
-            textarea.style.overflowY = 'auto';
-            hideDropdown();
-        });
-
-        for (const prompt of CHAT_GPT_PROMPTS) {
-            const option = document.createElement("option");
-            option.label = prompt.label;
-            option.value = prompt.value;
-            dropdown.add(option);
-        }
-
-        dropdown.size = dropdown.options.length;
-
-        dropdownContainer.appendChild(dropdown);
-        document.body.appendChild(dropdownContainer);
-
-        // $('#prompt-dropdown').select2();
-
-        positionDropdown(textarea);
-    }
-
-    function hideDropdown() {
-        var dropdownContainer = document.getElementById("prompt-dropdown-container");
-        if (dropdownContainer) {
-            dropdownContainer.remove();
-            currentOptionIndex = 0;
-        }
-    }
-
-    function positionDropdown(textarea) {
-        var dropdownContainer = document.getElementById("prompt-dropdown-container");
-        if (!dropdownContainer) {
-            return;
-        }
-
-        var textareaRect = textarea.getBoundingClientRect();
-        var windowHeight = window.innerHeight;
-
-        dropdownContainer.style.top = "";
-        dropdownContainer.style.bottom = windowHeight - textareaRect.top + "px";
-        dropdownContainer.style.maxHeight = textareaRect.top + "px";
-
-        dropdownContainer.style.left = textareaRect.left + "px";
-        dropdownContainer.style.width = textareaRect.width + "px";
-    }
-
-    window.addEventListener("resize", function() {
-        positionDropdown();
+    }).catch(error => {
+        alert('fetch prompt from cdn error:' + error);
     });
 
-    GM_addStyle(`
-        .custom-dropdown-container {
-            position: absolute;
-            z-index: 9999;
+    const script = document.createElement('script');
+
+    script.src = `${cdnUrl}/prompt-${defaultLanguage}.js`;
+
+    script.onload = function() {
+
+        var dropdownVisible = false;
+        var promptTextarea = null;
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && dropdownVisible) {
+                hideDropdown();
+                promptTextarea.focus();
+            }
+        });
+
+        // 等待元素加载完毕
+        function waitForElementToLoad() {
+
+            promptTextarea = document.getElementById('prompt-textarea');
+            
+            if (promptTextarea) {
+                promptTextarea.addEventListener('input', function(event) {
+                    const value = event.target.value.trim();
+                    if (value === '/') {
+                        if (!dropdownVisible) {
+                            showDropdown();
+                        }
+                    } else {
+                        if (dropdownVisible) {
+                            hideDropdown();
+                        }
+                    }
+                });
+            } else {
+                setTimeout(waitForElementToLoad, 500); // 等待0.5秒后再次尝试
+            }
         }
 
-        .custom-dropdown {
-            width: 100%;
-            background: #fff;
-            border: 0px;
-            padding: 4px;
-            font-family: inherit;
-            font-size: inherit;
-            color: inherit;
-            box-sizing: border-box;
-            overflow-y: auto;
+        waitForElementToLoad();
+
+        function showDropdown() {
+
+            dropdownVisible = true;
+
+            const dropdownContainer = document.createElement('div');
+            dropdownContainer.id = 'prompt-dropdown-container';
+            dropdownContainer.classList.add('custom-dropdown-container');
+
+            const dropdown = document.createElement('select');
+            dropdown.id = 'prompt-dropdown';
+            dropdown.classList.add('custom-dropdown');
+
+            const placeholderOption = document.createElement('option');
+            placeholderOption.disabled = true;
+            placeholderOption.selected = true;
+            placeholderOption.hidden = true;
+            dropdown.add(placeholderOption);
+
+            for (const prompt of CHAT_GPT_PROMPTS) {
+                const option = document.createElement('option');
+                option.text = prompt.label;
+                option.value = prompt.value;
+                dropdown.add(option);
+            }
+
+            dropdownContainer.appendChild(dropdown);
+            document.body.appendChild(dropdownContainer);
+
+            const $select = $(dropdown);
+            $select.select2();
+
+            $select.on('select2:close', function (e) {
+                if (e.target.selectedIndex <= 0) {
+                    return;
+                }
+
+                hideDropdown();
+                promptTextarea.focus();
+                promptTextarea.value = e.target.options[e.target.selectedIndex].value;
+                promptTextarea.style.overflowY = 'auto';
+                
+            });
+
+            positionDropdown();
+
+            $select.select2('open');
+            setTimeout(() => {document.querySelector('.select2-search__field').focus()}, 100);
+
         }
-    `);
+
+        function hideDropdown() {
+            var dropdownContainer = document.getElementById('prompt-dropdown-container');
+            if (dropdownContainer) {
+                dropdownContainer.remove();
+            }
+            dropdownVisible = false;
+        }
+
+        function positionDropdown() {
+            var dropdownContainer = document.getElementById('prompt-dropdown-container');
+            if (!dropdownContainer || !promptTextarea) {
+                return;
+            }
+
+            var textareaRect = promptTextarea.getBoundingClientRect();
+            var windowHeight = window.innerHeight;
+
+            dropdownContainer.style.top = '';
+            dropdownContainer.style.bottom = windowHeight - textareaRect.top + 'px';
+            dropdownContainer.style.maxHeight = textareaRect.top + 'px';
+
+            dropdownContainer.style.left = textareaRect.left + 'px';
+            dropdownContainer.style.width = textareaRect.width + 'px';
+        }
+
+        window.addEventListener('resize', function() {
+            positionDropdown();
+        });
+
+        GM_addStyle(`
+            .custom-dropdown-container {
+                position: absolute;
+                z-index: 9999;
+            }
+
+            .custom-dropdown {
+                width: 100%;
+                background: #fff;
+                border: 0px;
+                padding: 4px;
+                font-family: inherit;
+                font-size: inherit;
+                color: inherit;
+                box-sizing: border-box;
+                overflow-y: auto;
+            }
+        `);
+
+        GM_addStyle(GM_getResourceText('css'));
+    };
+
+    document.head.appendChild(script);
 
 })();
