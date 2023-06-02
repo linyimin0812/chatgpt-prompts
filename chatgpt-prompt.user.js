@@ -9,7 +9,7 @@
 // @description:zh-CN   在 ChatGPT 输入框中输入 '/' 时列出提示词
 // @require             https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js
-// @resource css        https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.dark.min.css
+// @resource css        https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css
 // @match               https://chat.openai.com/*
 // @grant               GM_addStyle
 // @grant               GM_getResourceText
@@ -21,7 +21,6 @@
     // TODO: 2. generate an icon
     // TODO: 3. prompts
     // TODO: 4. usage
-    // TODO: 5. mode
 
     'use strict';
 
@@ -114,6 +113,8 @@
             const $select = $(dropdown);
             $select.select2();
 
+            setThemeColor();
+
             $select.on('select2:close', function (e) {
                 if (e.target.selectedIndex <= 0) {
                     return;
@@ -142,13 +143,14 @@
         }
 
         function positionDropdown() {
-            var dropdownContainer = document.getElementById('prompt-dropdown-container');
+
+            const dropdownContainer = document.getElementById('prompt-dropdown-container');
             if (!dropdownContainer || !promptTextarea) {
                 return;
             }
 
-            var textareaRect = promptTextarea.getBoundingClientRect();
-            var windowHeight = window.innerHeight;
+            const textareaRect = promptTextarea.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
 
             dropdownContainer.style.top = '';
             dropdownContainer.style.bottom = windowHeight - textareaRect.top + 'px';
@@ -156,6 +158,19 @@
 
             dropdownContainer.style.left = textareaRect.left + 'px';
             dropdownContainer.style.width = textareaRect.width + 'px';
+        }
+
+        function setThemeColor() {
+            const computedStyle = getComputedStyle(document.querySelector('html'));
+            const scheme = computedStyle.getPropertyValue('color-scheme');
+            const color = scheme === 'light' ? 'white' : 'grey';
+
+            GM_addStyle(`
+                    .select2-results__options {
+                        background-color: ${color};
+                    }
+            `);
+
         }
 
         window.addEventListener('resize', function() {
