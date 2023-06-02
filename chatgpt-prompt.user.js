@@ -17,10 +17,6 @@
 
 (function() {
 
-    // TODO: 2. generate an icon
-    // TODO: 3. prompts
-    // TODO: 4. usage
-
     'use strict';
 
     const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.4/assets'
