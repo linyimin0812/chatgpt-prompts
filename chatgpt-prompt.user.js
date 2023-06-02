@@ -17,7 +17,6 @@
 
 (function() {
 
-    // TODO: 1. 切换chat时失效
     // TODO: 2. generate an icon
     // TODO: 3. prompts
     // TODO: 4. usage
@@ -47,24 +46,30 @@
 
     script.onload = function() {
 
-        var dropdownVisible = false;
-        var promptTextarea = null;
+        const promptTextareaMap = new Map();
 
         document.addEventListener('keydown', function(event) {
+            const promptTextarea = document.getElementById('prompt-textarea');
+            const dropdownVisible = promptTextareaMap.get(promptTextarea);
             if (event.key === 'Escape' && dropdownVisible) {
                 hideDropdown();
                 promptTextarea.focus();
             }
         });
 
-        // 等待元素加载完毕
-        function waitForElementToLoad() {
+        setInterval(() => {
 
-            promptTextarea = document.getElementById('prompt-textarea');
+            const promptTextarea = document.getElementById('prompt-textarea');
             
-            if (promptTextarea) {
+            if (promptTextarea && !promptTextareaMap.has(promptTextarea)) {
+
+                promptTextareaMap.set(promptTextarea, false);
+
                 promptTextarea.addEventListener('input', function(event) {
                     const value = event.target.value.trim();
+
+                    const dropdownVisible = promptTextareaMap.get(event.target);
+
                     if (value === '/') {
                         if (!dropdownVisible) {
                             showDropdown();
@@ -75,16 +80,14 @@
                         }
                     }
                 });
-            } else {
-                setTimeout(waitForElementToLoad, 500); // 等待0.5秒后再次尝试
             }
-        }
 
-        waitForElementToLoad();
+        }, 1000);
 
         function showDropdown() {
 
-            dropdownVisible = true;
+            const promptTextarea = document.getElementById('prompt-textarea');
+            promptTextareaMap.set(promptTextarea, true);
 
             const dropdownContainer = document.createElement('div');
             dropdownContainer.id = 'prompt-dropdown-container';
@@ -120,7 +123,10 @@
                     return;
                 }
 
+                const promptTextarea = document.getElementById('prompt-textarea');
+
                 hideDropdown();
+
                 promptTextarea.focus();
                 promptTextarea.value = e.target.options[e.target.selectedIndex].value;
                 promptTextarea.style.overflowY = 'auto';
@@ -135,19 +141,22 @@
         }
 
         function hideDropdown() {
-            var dropdownContainer = document.getElementById('prompt-dropdown-container');
+            const dropdownContainer = document.getElementById('prompt-dropdown-container');
             if (dropdownContainer) {
                 dropdownContainer.remove();
             }
-            dropdownVisible = false;
+            const promptTextarea = document.getElementById('prompt-textarea');
+            promptTextareaMap.set(promptTextarea, false);
         }
 
         function positionDropdown() {
 
             const dropdownContainer = document.getElementById('prompt-dropdown-container');
-            if (!dropdownContainer || !promptTextarea) {
+            if (!dropdownContainer) {
                 return;
             }
+
+            const promptTextarea = document.getElementById('prompt-textarea');
 
             const textareaRect = promptTextarea.getBoundingClientRect();
             const windowHeight = window.innerHeight;
