@@ -1,4 +1,4 @@
-[
+const CHAT_GPT_PROMPTS = [
 	{
 		"label":"[academic] - 历史学家",
 		"language":"zh-CN",
