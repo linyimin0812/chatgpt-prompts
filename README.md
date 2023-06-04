@@ -1,4 +1,5 @@
-# chatgpt-prompt
-chatgpt prompt
+# chatgpt-prompts
 
-![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.7/usage.gif)
+
+
+![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@latest/assets/usage.gif)

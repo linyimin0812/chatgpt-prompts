@@ -3,7 +3,7 @@
 // @namespace           https://github.com/linyimin0812/chatgpt-prompts
 // @supportURL          https://github.com/linyimin0812/chatgpt-prompts
 // @updateURL           https://github.com/linyimin0812/chatgpt-prompts/blob/main/chatgpt-prompt.user.js
-// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.4/chatgpt-prompt.user.js
+// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@latest/chatgpt-prompt.user.js
 // @version             1.0
 // @author              linyimin
 // @description:zh-CN   在 ChatGPT 输入框中输入 '/' 时列出提示词
@@ -19,18 +19,11 @@
 
     'use strict';
 
-    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@v0.0.4/assets'
+    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@latest/prompts-data.js'
 
-    var language = navigator.language;
-    const defaultLanguage = 'en-US';
-
-    fetch(`${cdnUrl}/prompt-${language}.js`).then(response => {
+    fetch(cdnUrl).then(response => {
         if (!response.ok) {
-            if (language !== defaultLanguage) {
-                alert(`Use the default language: ${defaultLanguage} for the prompts of language: ${language} is exist.`);
-            } else {
-                alert(`prompts is not exist, plase check if the cdn: ${cdnUrl} is available.`)
-            }
+            alert(`fetch prompt from cdn error plase check if the cdn: ${cdnUrl} is available.`)
         }
     }).catch(error => {
         alert('fetch prompt from cdn error:' + error);
@@ -38,7 +31,7 @@
 
     const script = document.createElement('script');
 
-    script.src = `${cdnUrl}/prompt-${defaultLanguage}.js`;
+    script.src = cdnUrl;
 
     script.onload = function() {
 
