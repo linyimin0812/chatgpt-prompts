@@ -3,7 +3,7 @@
 // @namespace           https://github.com/linyimin0812/chatgpt-prompts
 // @supportURL          https://github.com/linyimin0812/chatgpt-prompts
 // @updateURL           https://github.com/linyimin0812/chatgpt-prompts/blob/main/chatgpt-prompt.user.js
-// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@latest/chatgpt-prompt.user.js
+// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/chatgpt-prompt.user.js
 // @version             1.0.0
 // @author              linyimin
 // @description:zh-CN   在 ChatGPT 输入框中输入 '/' 时列出提示词
