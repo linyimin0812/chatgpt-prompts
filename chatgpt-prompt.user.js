@@ -19,7 +19,7 @@
 
     'use strict';
 
-    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompt@latest/prompts-data.js'
+    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@latest/prompts-data.js'
 
     fetch(cdnUrl).then(response => {
         if (!response.ok) {
@@ -36,6 +36,15 @@
     script.onload = function() {
 
         const promptTextareaMap = new Map();
+        const languageSet = new Set();
+
+        // Store the languages of prompt
+        for (const prompt of CHAT_GPT_PROMPTS) {
+            if (languageSet.has(prompt.language)) {
+                continue;
+            }
+            languageSet.add(prompt.language);
+        }
 
         document.addEventListener('keydown', function(event) {
             const promptTextarea = document.getElementById('prompt-textarea');
@@ -61,7 +70,7 @@
 
                     if (value === '/') {
                         if (!dropdownVisible) {
-                            showDropdown();
+                            showDropdown("en");
                         }
                     } else {
                         if (dropdownVisible) {
@@ -73,7 +82,7 @@
 
         }, 1000);
 
-        function showDropdown() {
+        function showDropdown(language) {
 
             const promptTextarea = document.getElementById('prompt-textarea');
             promptTextareaMap.set(promptTextarea, true);
@@ -86,13 +95,16 @@
             dropdown.id = 'prompt-dropdown';
             dropdown.classList.add('custom-dropdown');
 
+            const prompts = CHAT_GPT_PROMPTS.filter(prompt => prompt.language === language);
+
             const placeholderOption = document.createElement('option');
             placeholderOption.disabled = true;
             placeholderOption.selected = true;
+            placeholderOption.text = `Total ${prompts.length} prompts`;
             placeholderOption.hidden = true;
             dropdown.add(placeholderOption);
 
-            for (const prompt of CHAT_GPT_PROMPTS) {
+            for (const prompt of prompts) {
                 const option = document.createElement('option');
                 option.text = prompt.label;
                 option.value = prompt.value;
@@ -107,14 +119,19 @@
 
             setThemeColor();
 
-            $select.on('select2:close', function (e) {
+            $select.on('select2:open', () => {
+                createLanguageAndDescription($select, language);
+            });
+
+            $select.on('select2:close', e => {
+
+                hideDropdown();
+
                 if (e.target.selectedIndex <= 0) {
                     return;
                 }
 
                 const promptTextarea = document.getElementById('prompt-textarea');
-
-                hideDropdown();
 
                 promptTextarea.focus();
                 promptTextarea.value = e.target.options[e.target.selectedIndex].value;
@@ -125,7 +142,60 @@
             positionDropdown();
 
             $select.select2('open');
-            setTimeout(() => {document.querySelector('.select2-search__field').focus()}, 100);
+
+            setTimeout(() => {
+                document.querySelector('.select2-search__field').focus();
+            }, 100);
+
+        }
+
+        function createLanguageAndDescription(select2, selectedLanguage) {
+
+            const parentSpan = document.createElement('span');
+            parentSpan.style.display = 'flex';
+            parentSpan.style.alignItems = 'center';
+            parentSpan.style.justifyContent = 'space-between';
+
+            // language selector
+            const languageDropdown = document.createElement('select');
+            languageDropdown.style.marginBottom = '4px';
+            languageDropdown.style.paddingTop = '2px';
+            languageDropdown.style.paddingBottom = '2px';
+
+            const languages = Array.from(languageSet).sort();
+
+            for (const language of languages) {
+                const option = document.createElement('option');
+                option.text = language;
+                option.value = language;
+                if (language === selectedLanguage) {
+                    option.selected = true;
+                }
+                languageDropdown.add(option);
+            }
+
+            languageDropdown.addEventListener('change', event => {
+                select2.select2('close');
+                showDropdown(event.target.value);
+            });
+
+            // prompts description
+            const descSpan = document.createElement('span');
+            descSpan.style.float = 'right';
+            const linkElement = document.createElement('a');
+            linkElement.href = 'https://www.aishort.top/en/';
+            linkElement.target = '_blank';
+            linkElement.textContent = 'AI Short';
+            linkElement.style.textDecoration = 'underline';
+            linkElement.style.color = 'blue';
+
+            descSpan.appendChild(linkElement);
+
+            parentSpan.appendChild(languageDropdown);
+            parentSpan.appendChild(descSpan);
+
+            const referenceElement = document.getElementsByClassName('select2-search__field')[0];
+            document.getElementsByClassName("select2-search--dropdown")[0].insertBefore(parentSpan, referenceElement);
 
         }
 
