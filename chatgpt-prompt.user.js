@@ -2,10 +2,10 @@
 // @name                chatgpt-prompts
 // @namespace           https://github.com/linyimin0812/chatgpt-prompts
 // @supportURL          https://github.com/linyimin0812/chatgpt-prompts
-// @updateURL           https://github.com/linyimin0812/chatgpt-prompts/blob/main/chatgpt-prompt.user.js
-// @downloadURL         https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/chatgpt-prompt.user.js
 // @version             1.0.0
 // @author              linyimin
+// @description         在 ChatGPT 输入框中输入 '/' 时列出提示词(Display a list of prompts When '/' is entered in the ChatGPT input box)
+// @description:en      Display a list of prompts When '/' is entered in the ChatGPT input box
 // @description:zh-CN   在 ChatGPT 输入框中输入 '/' 时列出提示词
 // @require             https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.6.4.min.js
 // @require             https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/js/select2.min.js
@@ -13,6 +13,7 @@
 // @match               https://chat.openai.com/*
 // @grant               GM_addStyle
 // @grant               GM_getResourceText
+// @license             MIT
 // ==/UserScript==
 
 (function() {
