@@ -34,6 +34,6 @@ The preferred browsers are Chrome, Firefox, Edge, and other browsers who are com
 | sequence | Script Source |
 | :---: | :---: |
 | 1 | [github](https://raw.githubusercontent.com/linyimin0812/chatgpt-prompts/v1.0.0/chatgpt-prompt.user.js) |
-| 2 | [GreasyFork](https://raw.githubusercontent.com/linyimin0812/chatgpt-prompts/v1.0.0/chatgpt-prompt.user.js) |
+| 2 | [GreasyFork](https://greasyfork.org/zh-CN/scripts/467943-chatgpt-prompts) |
 
 
