@@ -26,14 +26,12 @@ The preferred browsers are Chrome, Firefox, Edge, and other browsers who are com
 
 1. Install Tampermonkey browser extension from [ Tampermonkey website](https://www.tampermonkey.net/).
 2. Install `chatgpt-prompts`，you can select a repository from [Installation Channel](#Installation-Channel).
-3. Open [ChatGPT](https://chat.openai.com/) and enjoy it.
-
-
-# Installation Channel
 
 | sequence | Script Source |
 | :---: | :---: |
 | 1 | [github](https://raw.githubusercontent.com/linyimin0812/chatgpt-prompts/v1.0.0/chatgpt-prompt.user.js) |
 | 2 | [GreasyFork](https://greasyfork.org/en/scripts/467943-chatgpt-prompts) |
+
+3. Open [ChatGPT](https://chat.openai.com/) and enjoy it.
 
 
