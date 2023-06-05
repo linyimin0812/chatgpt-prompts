@@ -19,7 +19,7 @@
 
     'use strict';
 
-    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/prompts-data.js'
+    const cdnUrl = 'https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@main/prompts-data.js'
 
     fetch(cdnUrl).then(response => {
         if (!response.ok) {

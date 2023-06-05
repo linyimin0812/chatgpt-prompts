@@ -8,13 +8,13 @@
 <details open>
   <summary style='cursor: pointer'><strong>说明</strong></summary>
 
-![](./assets/deac.png)
+![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/assets/desc.png)
 </details>
 
 <details open>
   <summary style='cursor: pointer'><strong>使用示例</strong></summary>
 
-![](./assets/usage.gif)
+![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/assets/usage.gif)
 </details>
 
 

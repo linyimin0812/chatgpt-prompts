@@ -9,13 +9,13 @@ Tempermonkey script, When '/' is entered in the ChatGPT input box, display a lis
 <details open>
   <summary style='cursor: pointer'><strong>description</strong></summary>
 
-![](./assets/deac.png)
+![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/assets/desc.png)
 </details>
 
 <details open>
   <summary style='cursor: pointer'><strong>demo</strong></summary>
 
-![](./assets/usage.gif)
+![](https://cdn.jsdelivr.net/gh/linyimin0812/chatgpt-prompts@v1.0.0/assets/usage.gif)
 </details>
 
 
